@@ -6,6 +6,7 @@ var twitterAPI = require('node-twitter-api');
 var reporter = require('crash-reporter');
 var stream = require('my_modules/stream');
 var key = require('my_modules/key');
+var ipc = require('ipc');
 
 reporter.start();
 
@@ -57,16 +58,20 @@ function getRequest() {
 function getMainWindow() {
   mainWindow = new BrowserWindow({ 'width': 1024, 'height': 600 });
   mainWindow.loadUrl('file://' + __dirname + '/view/index.html');
+  mainWindow.on('closed', function() {
+    mainWindow = null;
+  });
+}
+
+ipc.on('connection', function(event, arg) {
+  console.log(arg);
 
   // TODO : DB状況を非同期にアップデートして view に表示する
   stream.streaming(
     TWITTER_CONSUMER_KEY,
     TWITTER_CONSUMER_SECRET,
     ACCESS_TOKEN_KEY,
-    ACCESS_TOKEN_SECRET
+    ACCESS_TOKEN_SECRET,
+    mainWindow
   );
-
-  mainWindow.on('closed', function() {
-    mainWindow = null;
-  });
-}
+});
