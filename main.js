@@ -7,6 +7,7 @@ var reporter = require('crash-reporter');
 var stream = require('my_modules/stream');
 var key = require('my_modules/key');
 var ipc = require('ipc');
+var mongoose = require('mongoose');
 
 reporter.start();
 
@@ -16,10 +17,20 @@ var TWITTER_CONSUMER_KEY = key.CONSUMER_KEY;
 var TWITTER_CONSUMER_SECRET = key.CONSUMER_SECRET;
 var ACCESS_TOKEN_KEY = '';
 var ACCESS_TOKEN_SECRET = '';
+var DB_NAME = 'kirokutron';
 
 app
-  .on('ready', getRequest)
+  .on('ready', function () { connectMongoDB(); getRequest(); })
   .on('window-all-closed', function() { if (process.platform != 'darwin') app.quit();});
+
+function connectMongoDB() {
+  mongoose.connect('mongodb://localhost/' + DB_NAME);
+  var db = mongoose.connection;
+  db.on('error', console.error.bind(console, 'connection error:'));
+  db.once('open', function() {
+    console.log("Connect database successfully! : side main");
+  });
+}
 
 function getRequest() {
   var twitter = new twitterAPI({

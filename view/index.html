@@ -3,9 +3,25 @@
   <head>
     <meta charset="UTF-8">
     <title>Kirokutron</title>
-    <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
   </head>
   <body>
+    <!-- TODO: ユーザー名を welcome に続けて表示 -->
     <h1>Welcome!</h1>
+    <select id="tags" id="" name="">
+      <option class="tag" value=""></option>
+    </select>
+
+    <table id="tweet_table">
+      <tr id="tweet_table_header">
+        <th>body</th>
+        <th>tweeted_at</th>
+      </tr>
+      <tr class="tweet">
+        <td class="tweet_text">sample tweet 1</td>
+        <td class="tweeted_at">sample tweet 2</td>
+      </tr>
+    </table>
+    <script type="text/javascript" src="js/index.js"></script>
   </body>
 </html>
