@@ -75,8 +75,6 @@ function getMainWindow() {
 }
 
 ipc.on('connection', function(event, arg) {
-  console.log(arg);
-
   // TODO : DB状況を非同期にアップデートして view に表示する
   stream.streaming(
     TWITTER_CONSUMER_KEY,

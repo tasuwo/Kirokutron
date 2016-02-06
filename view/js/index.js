@@ -5,10 +5,6 @@ var ipc = require('ipc');
 var async = require('async');
 var DB_NAME = 'kirokutron';
 
-ipc.on('db-updated', function(arg) {
-  console.log(arg);
-});
-
 function updateTags(callback) {
   async.waterfall(
     [
@@ -23,6 +19,7 @@ function updateTags(callback) {
           });
       },
       function (tag_names, callback) {
+        console.log(tag_names);
         $('#tags').find('option').remove();
         for(var i=0; i<tag_names.length; i++){
           $('#tags')
@@ -47,11 +44,10 @@ function getTweets(tag_name, callback) {
     [
       function (callback) {
         Tweet
-          .find({tags: tag_name}, function(err, docs) {})
+          .find({'tags.name' : tag_name}, function(err, docs) {})
           .exec(function (err, docs) { callback(null, docs); });
       },
       function (tweets, callback) {
-        console.log("reached");
         $('.tweet').remove();
         tweets.forEach(function(tweet){
           $('#tweet_table').append(
@@ -74,6 +70,7 @@ function getTweets(tag_name, callback) {
   );
 }
 
+// 画面描画時
 async.waterfall(
   [
     function (callback) {
@@ -90,9 +87,34 @@ async.waterfall(
       updateTags(callback);
     },
     function (callback) {
-      getTweets(callback);
+      var first_tag = $('select#tags option:first').text();
+      getTweets(first_tag, callback);
     }
   ], function(err) {
     if (err) { throw err; }
   }
 );
+
+// タグ選択時
+$("#tags").change(function() {
+  var selected_tag = $('select#tags option:selected').text();
+  getTweets(selected_tag, null);
+});
+
+// DB更新時(tweet時)
+ipc.on('db-updated', function(arg) {
+  async.waterfall(
+    [
+      function (callback) {
+        updateTags(callback);
+      },
+      function (callback) {
+        var selected_tag = $('select#tags option:selected').text();
+        getTweets(selected_tag, callback);
+      }
+    ],
+    function (err) {
+      if (err) { throw err; }
+    }
+  );
+});
