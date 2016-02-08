@@ -24,15 +24,28 @@ exports.CONSUMER_SECRET = /* コンシューマシークレット */;
 ```
 
 mongoDB を利用するので準備しておく．
+homebrew に色々言われるので，それに従って色々やっておく．
 
 ```bash
 $ brew install mongodb
+```
+
+npm がなければ入れておく．
+
+``` bash
+$ brew install npm
 ```
 
 依存パッケージをインストールする．
 
 ```bash
 $ npm install
+```
+
+Electron がなければ入れておく．
+
+``` bash
+$ npm -g install electron-prebuilt
 ```
 
 ##つかいかた
