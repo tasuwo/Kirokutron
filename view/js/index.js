@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var Tag = require('my_modules/stream').Tag;
 var Tweet = require('my_modules/stream').Tweet;
-var ipc = require('ipc');
+var ipc = require('electron').ipcMain;
 var async = require('async');
 var DB_NAME = 'kirokutron';
 

@@ -6,10 +6,10 @@ var twitterAPI = require('node-twitter-api');
 var reporter = require('crash-reporter');
 var stream = require('my_modules/stream');
 var key = require('my_modules/key');
-var ipc = require('ipc');
+var ipc = require('electron').ipcMain;
 var mongoose = require('mongoose');
 
-reporter.start();
+//reporter.start();
 
 var mainWindow = null;
 
@@ -62,13 +62,13 @@ function getRequest() {
       }, 0);
     });
 
-    loginWindow.loadUrl(url);
+    loginWindow.loadURL(url);
   });
 }
 
 function getMainWindow() {
   mainWindow = new BrowserWindow({ 'width': 1024, 'height': 600 });
-  mainWindow.loadUrl('file://' + __dirname + '/view/index.html');
+  mainWindow.loadURL('file://' + __dirname + '/view/index.html');
   mainWindow.on('closed', function() {
     mainWindow = null;
   });
